@@ -1,0 +1,12 @@
+#!/bin/sh
+# Fast pre-commit checks — lint + types only (no build, too slow for a hook).
+# Full build runs in CI and via /close before creating the PR.
+set -e
+
+echo "→ pnpm lint..."
+npx pnpm lint
+
+echo "→ tsc --noEmit..."
+npx pnpm tsc --noEmit
+
+echo "✓ Pre-commit checks passed."

@@ -1,0 +1,4 @@
+# Bitácora: log append-only. `union` hace que dos PRs que agregan entradas a la vez
+# se auto-mergeen (git conserva ambas) en vez de marcar conflicto. Reemplaza al bot
+# update-bitacora que pusheaba directo a main (incompatible con branch protection).
+BITACORA.md      merge=union
