@@ -11,15 +11,6 @@
 ## Formato de entrada
 
 ```
-### 2026-09-23 · devbro · seguimientos — pantalla de envíos iniciados por el negocio, ajustes de reactivación y envíos manuales desde la card (M-Outbound E)
-- Qué cambió: (1) `lib/api/outbound.ts` (zod + funciones sobre `/api/v1/outbound`) y `hooks/use-outbound.ts` (queries + mutations con toast; el historial se refresca cada 30 s). (2) `/seguimientos` (`SeguimientosScreen`): tabla de plantillas enviadas —entradas, recordatorios, reactivación— con estado según Meta (enviado/entregado/leído/falló/omitido, motivo en tooltip), filtros por tipo y estado, link a la card; ítem "Seguimientos" en el sidebar sin `requires`. (3) Ajustes → sección "Seguimientos" (`OutboundSettingsCard/Form`, `canManagePayments` como pagos): switch de reactivación, novedad del mes (obligatoria si está activa, con vista previa del texto), días sin responder para Enganchando/Calificado y para Nuevo, tope diario, ventana de recontacto. (4) `conversation-panel`: botones "Recordar evento" y "Reactivar lead" (los 3 roles), con el motivo traducido cuando no sale.
-- Por qué: cierra el plan de seguimiento automático: sin esto la reactivación solo se activaba por SQL y el operador no veía qué salió ni si llegó.
-- Spec/decisión que respeta: RBAC igual que pagos para la config; operación diaria para el resto. El front no rutea por nombres de pipeline. Contrato: `server/docs/SPEC_M-Outbound.md` §5e.
-- Decisiones: las reglas se editan como dos filas fijas (el backend acepta N); `useWatch` en vez de `watch()` por la regla del React Compiler; el historial no usa SSE (los estados llegan por webhook al backend) — polling de 30 s alcanza.
-- Prueba local: `pnpm lint` (0 errores; warnings preexistentes), `pnpm tsc --noEmit` limpio, `pnpm build` OK con la ruta `/seguimientos`. Backend: `test_outbound_api.py` verde.
-- Pendiente de deploy: merge `develop` → `main` (Vercel despliega solo). Requiere el backend con migraciones 0038+0039.
-- Commit: 2d90ef8 + este — rama `develop`
-
 ### YYYY-MM-DD · <autor> · <pieza>
 - Qué cambió:
 - Por qué:
@@ -29,6 +20,15 @@
 ```
 
 ## Entradas
+
+### 2026-09-23 · devbro · seguimientos — pantalla de envíos iniciados por el negocio, ajustes de reactivación y envíos manuales desde la card (M-Outbound E)
+- Qué cambió: (1) `lib/api/outbound.ts` (zod + funciones sobre `/api/v1/outbound`) y `hooks/use-outbound.ts` (queries + mutations con toast; el historial se refresca cada 30 s). (2) `/seguimientos` (`SeguimientosScreen`): tabla de plantillas enviadas —entradas, recordatorios, reactivación— con estado según Meta (enviado/entregado/leído/falló/omitido, motivo en tooltip), filtros por tipo y estado, link a la card; ítem "Seguimientos" en el sidebar sin `requires`. (3) Ajustes → sección "Seguimientos" (`OutboundSettingsCard/Form`, `canManagePayments` como pagos): switch de reactivación, novedad del mes (obligatoria si está activa, con vista previa del texto), días sin responder para Enganchando/Calificado y para Nuevo, tope diario, ventana de recontacto. (4) `conversation-panel`: botones "Recordar evento" y "Reactivar lead" (los 3 roles), con el motivo traducido cuando no sale.
+- Por qué: cierra el plan de seguimiento automático: sin esto la reactivación solo se activaba por SQL y el operador no veía qué salió ni si llegó.
+- Spec/decisión que respeta: RBAC igual que pagos para la config; operación diaria para el resto. El front no rutea por nombres de pipeline. Contrato: `server/docs/SPEC_M-Outbound.md` §5e.
+- Decisiones: las reglas se editan como dos filas fijas (el backend acepta N); `useWatch` en vez de `watch()` por la regla del React Compiler; el historial no usa SSE (los estados llegan por webhook al backend) — polling de 30 s alcanza.
+- Prueba local: `pnpm lint` (0 errores; warnings preexistentes), `pnpm tsc --noEmit` limpio, `pnpm build` OK con la ruta `/seguimientos`. Backend: `test_outbound_api.py` verde.
+- Pendiente de deploy: merge `develop` → `main` (Vercel despliega solo). Requiere el backend con migraciones 0038+0039.
+- Commit: 2d90ef8 + este — rama `develop`
 
 ### 2026-08-31 · innova67 · crm/realtime — el hook SSE aprende `receipt_needs_review` (#201, server#309)
 - Qué cambió: `hooks/use-realtime-events.ts` agrega al `z.discriminatedUnion` el evento `receipt_needs_review` (`{card_id, conversation_id}`) y su handler: invalida `boardKeys.all` (aviso "revisar comprobante"), `cardKeys.detail` (el resumen IA ahora trae la nota con qué subsanar, server#306) y `receiptKeys.detail` (semáforo del panel).
