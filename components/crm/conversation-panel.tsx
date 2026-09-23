@@ -1,7 +1,7 @@
 'use client'
 
 import { Fragment, useState, type DragEvent } from 'react'
-import { Bot, MessageSquare, QrCode, User, X } from 'lucide-react'
+import { BellRing, Bot, MessageSquare, QrCode, Send, User, X } from 'lucide-react'
 import { toast } from 'sonner'
 
 import { cn } from '@/lib/utils'
@@ -12,6 +12,7 @@ import { Switch } from '@/components/ui/switch'
 import { useCard } from '@/hooks/use-card'
 import { useBoard } from '@/hooks/use-board'
 import { useGenerateEntry, useSetAiActive } from '@/hooks/use-card-mutations'
+import { useReactivateCard, useRemindCard } from '@/hooks/use-outbound'
 import { usePermissions } from '@/hooks/use-permissions'
 import { ConversationMessage } from '@/components/crm/conversation-message'
 import {
@@ -45,6 +46,8 @@ export function ConversationPanel({
   const { canOperateCrm } = usePermissions()
   const setAiActive = useSetAiActive(cardId ?? '')
   const generateEntryMutation = useGenerateEntry(cardId ?? '')
+  const remindMutation = useRemindCard(cardId ?? '')
+  const reactivateMutation = useReactivateCard(cardId ?? '')
   // Keyed por card: un adjunto pendiente de otra conversación no se arrastra a esta.
   const [attachment, setAttachment] = useState<{ cardId: string; file: File } | null>(null)
   const [dragOver, setDragOver] = useState(false)
@@ -191,6 +194,31 @@ export function ConversationPanel({
             <QrCode className="size-4 flex-shrink-0" />
             {generateEntryMutation.isPending ? 'Generando…' : 'Generar entrada'}
           </Button>
+        )}
+
+        {canOperateCrm && (
+          <div className="grid grid-cols-2 gap-2">
+            <Button
+              variant="outline"
+              onClick={() => remindMutation.mutate()}
+              disabled={remindMutation.isPending}
+              title="Manda la plantilla de recordatorio del evento de su entrada"
+              className="h-9 gap-2 border-white/10 bg-white/[0.03] text-xs text-white"
+            >
+              <BellRing className="size-3.5 flex-shrink-0" />
+              {remindMutation.isPending ? 'Enviando…' : 'Recordar evento'}
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => reactivateMutation.mutate()}
+              disabled={reactivateMutation.isPending}
+              title="Manda la plantilla de reactivación con la novedad del mes (Meta la cobra)"
+              className="h-9 gap-2 border-white/10 bg-white/[0.03] text-xs text-white"
+            >
+              <Send className="size-3.5 flex-shrink-0" />
+              {reactivateMutation.isPending ? 'Enviando…' : 'Reactivar lead'}
+            </Button>
+          </div>
         )}
 
         {canReply && (

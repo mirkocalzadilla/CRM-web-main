@@ -14,6 +14,7 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   ScanLine,
+  Send,
   Settings,
   ShieldCheck,
   Users,
@@ -54,6 +55,8 @@ const navItems: readonly NavItem[] = [
   { label: 'Contactos', href: '/contacts', icon: Users },
   // Entradas: sin `requires` a propósito — quien atiende la puerta suele ser staff (#185).
   { label: 'Entradas', href: '/entradas', icon: ScanLine },
+  // Seguimientos: envíos que inicia el sistema (M-Outbound). Operación diaria, sin `requires`.
+  { label: 'Seguimientos', href: '/seguimientos', icon: Send },
   // Agentes: solo platform_operator (superadmin). Catálogo/Usuarios: + client_admin (#126).
   { label: 'Agentes', href: '/agents', icon: Bot, requires: 'canManageConfig' },
   { label: 'Catálogo', href: '/catalogo', icon: BookOpen, requires: 'canManageCatalog' },

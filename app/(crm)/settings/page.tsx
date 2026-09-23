@@ -2,6 +2,7 @@
 
 import { ChangePasswordForm } from '@/components/crm/account/change-password-form'
 import { ProfileCard } from '@/components/crm/account/profile-card'
+import { OutboundSettingsCard } from '@/components/crm/settings/outbound-settings-card'
 import { PaymentSettingsCard } from '@/components/crm/settings/payment-settings-card'
 import { usePermissions } from '@/hooks/use-permissions'
 
@@ -27,6 +28,18 @@ export default function SettingsPage() {
             Contra qué se validan los comprobantes que manda el lead y con qué QR se cobra.
           </p>
           <PaymentSettingsCard />
+        </section>
+      )}
+
+      {/* Seguimientos — org-scoped: client_admin + platform_operator (M-Outbound D). */}
+      {canManagePayments && (
+        <section>
+          <h2 className="mb-1 text-lg font-semibold text-white">Seguimientos</h2>
+          <p className="mb-6 text-sm text-zinc-500">
+            Reactivación automática de leads que dejaron de responder, y la novedad del mes que
+            va en ese mensaje.
+          </p>
+          <OutboundSettingsCard />
         </section>
       )}
 
